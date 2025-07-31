@@ -7,7 +7,7 @@ import (
 )
 
 func control(ch chan float64) {
-	x := 150.0
+	x := 0.0
 	kp := 0.4
 	ki := 0.005
 	kd := 0.0005

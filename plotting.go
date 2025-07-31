@@ -32,7 +32,7 @@ func plotting(ch chan float64) {
 		fmt.Fprintf(file, "%d %v\n", i, points[i])
 	}
 
-	gnuplotArgs := "set terminal pngcairo size 800,600; set output 'pid_plot.png'; set grid lw 2; plot 'plot_data.txt' using 1:2 lw 2 with lines title 'PID controller test';"
+	gnuplotArgs := "set terminal pngcairo size 800,600 enhanced font 'Verdana,12'; set output 'pid_plot.png'; set grid lw 1; set xlabel 'Time (s)'; set ylabel 'Controlled Variable'; set style line 1 lc 1 lw 2 ; plot 'plot_data.txt' using 1:2 with lines ls 1 title 'PID controller test';"
 	cmd := exec.Command("gnuplot", "-e", gnuplotArgs)
 	err = cmd.Run()
 	if err != nil {
