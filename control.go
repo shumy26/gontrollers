@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	pid "github.com/shumy26/gontrollers/PID"
 )
 
-func control(ch chan float64) {
-	x := 0.0
+func control(ch chan float64, vari float64) {
+	x := vari
 	kp := 0.4
 	ki := 0.005
 	kd := 0.0005
@@ -22,9 +20,9 @@ func control(ch chan float64) {
 		TargetValue:        140.0,
 	}
 
-	for i := 0; i < 300; i++ {
+	for i := 0; i < 50; i++ {
 		ch <- pidsystem.ControlledVariable
-		fmt.Println(pidsystem.ControlledVariable)
+		//fmt.Println(pidsystem.ControlledVariable)
 		pidError := pidsystem.DetermineError()
 		pidsystem.Increment(pidError)
 	}

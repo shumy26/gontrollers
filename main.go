@@ -1,26 +1,31 @@
 package main
 
 import (
-	"fmt"
-
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	ch := make(chan float64)
-	go control(ch)
-	plotting(ch)
+	vari := 0.0
+	img := canvas.NewImageFromFile("pid_plot.png")
+	img.Refresh()
+	img.FillMode = canvas.ImageFillOriginal
+	img.ScaleMode = canvas.ImageScaleSmooth
 
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Hello")
-	myWindow.SetContent(widget.NewLabel("Hello"))
+	a := app.New()
+	w := a.NewWindow("Update Time")
 
-	myWindow.Show()
-	myApp.Run()
-	tidyUp()
-}
+	message := widget.NewLabel("Welcome")
+	button := widget.NewButton("Update", func() {
+		vari += 10
+		ch := make(chan float64)
+		go control(ch, vari)
+		plotting(ch)
+		img.Refresh()
+	})
 
-func tidyUp() {
-	fmt.Println("Exited")
+	w.SetContent(container.NewVBox(message, button, img))
+	w.ShowAndRun()
 }
