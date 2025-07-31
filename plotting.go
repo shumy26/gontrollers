@@ -1,18 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"log"
-
-	"gonum.org/v1/plot"
-	"gonum.org/v1/plot/plotter"
-	"gonum.org/v1/plot/vg"
+	"os"
+	"os/exec"
 )
 
+var plotDataFile string = "plot_data.txt"
+
 func plotting(ch chan float64) {
-	plt := plot.New()
-	plt.Title.Text = "PID controller test"
-	plt.X.Label.Text = "Time"
-	plt.Y.Label.Text = "Controlled Variable"
+	file, err := os.Create(plotDataFile)
+	if err != nil {
+		log.Fatal("failure to create plotting data file")
+	}
+	defer file.Close()
+
+	fmt.Fprintln(file, "# X Y")
 
 	points := make([]float64, 0)
 
@@ -24,18 +28,15 @@ func plotting(ch chan float64) {
 		points = append(points, value)
 	}
 
-	pltter := make(plotter.XYs, len(points))
-
 	for i := range len(points) {
-		pltter[i].X = float64(i)
-		pltter[i].Y = points[i]
+		fmt.Fprintf(file, "%d %v\n", i, points[i])
 	}
 
-	line, err := plotter.NewLine(pltter)
+	gnuplotArgs := "set terminal pngcairo size 800,600; set output 'pid_plot.png'; set grid lw 2; plot 'plot_data.txt' using 1:2 lw 2 with lines title 'PID controller test';"
+	cmd := exec.Command("gnuplot", "-e", gnuplotArgs)
+	err = cmd.Run()
 	if err != nil {
-		log.Fatal("err")
+		log.Fatal(err)
 	}
-	plt.Add(line)
 
-	plt.Save(6*vg.Inch, 4*vg.Inch, "pid_plot.png")
 }
