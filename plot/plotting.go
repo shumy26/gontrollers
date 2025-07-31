@@ -1,4 +1,4 @@
-package main
+package plot
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 
 var plotDataFile string = "plot_data.txt"
 
-func plotting(ch chan float64) {
+func Plotting(ch chan float64) {
 	file, err := os.Create(plotDataFile)
 	if err != nil {
 		log.Fatal("failure to create plotting data file")

@@ -5,6 +5,8 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"github.com/shumy26/gontrollers/control"
+	"github.com/shumy26/gontrollers/plot"
 )
 
 func main() {
@@ -21,8 +23,8 @@ func main() {
 	button := widget.NewButton("Update", func() {
 		vari += 10
 		ch := make(chan float64)
-		go control(ch, vari)
-		plotting(ch)
+		go control.Control(ch, vari)
+		plot.Plotting(ch)
 		img.Refresh()
 	})
 

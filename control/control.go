@@ -1,16 +1,12 @@
-package main
+package control
 
-import (
-	pid "github.com/shumy26/gontrollers/PID"
-)
-
-func control(ch chan float64, vari float64) {
+func Control(ch chan float64, vari float64) {
 	x := vari
 	kp := 0.4
 	ki := 0.005
 	kd := 0.0005
 
-	pidsystem := pid.PIDSystem{
+	pidsystem := PIDSystem{
 		Name:               "test",
 		ControlledVariable: x,
 		Kp:                 kp,

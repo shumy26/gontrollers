@@ -1,4 +1,4 @@
-package pid
+package control
 
 type PIDSystem struct {
 	Name               string
