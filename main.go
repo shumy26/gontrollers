@@ -1,6 +1,9 @@
 package main
 
 import (
+	"time"
+
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -29,5 +32,20 @@ func main() {
 	})
 
 	w.SetContent(container.NewVBox(message, button, img))
+
+	go func() {
+		ticker := time.NewTicker(time.Millisecond * 500)
+		for range ticker.C {
+			fyne.Do(func() {
+				vari += 10
+				ch := make(chan float64)
+				go control.Control(ch, vari)
+				plot.Plotting(ch)
+				img.Refresh()
+			})
+		}
+	}()
+
 	w.ShowAndRun()
+
 }
